@@ -4,30 +4,56 @@ Case study basic rule questions:
 {
     "Country" : "Norway"
 }
+Response:
+{
+    "PaymentMethod": "Vipps"
+}
+
 
 2. Route 20 % of Mastercard transactions in SEK to Acquirer A, 50 % of Mastercard transactions to Acquirer B and 30 % of Mastercard transactions to Acquirer C.
 {
     "PaymentMethod" : "MasterCard",
     "Currency": "SEK"
 }
+Response:
+{
+    "Routing": "AcquirerC"
+}
+
 
 3. Waive 3DS for existing customers with a previous successful 3DS transaction in the previous last 365 days (1 year).
 {
     "Previous3DS": true,
     "DaysSinceLast3DS": 123
 }
+Response:
+{
+    "Waive3DS": true
+}
+
 
 4. Enable a new feature only for employees in Norwegian.
 {
     "Country" : "Norway",
     "CustomerType": "Employee"
 }
+Response:
+{
+    "EnableFeature": true,
+    "PaymentMethod": "Vipps"
+}
+
 
 5. For high-risk countries (e.g., Country-X, Country-Y), transactions exceeding $10,000 require additional verification.
 {
     "Country" : "Belgium",
     "TransactionAmount": 10001.0
 }
+Response:
+{
+    "RequireAdditionalVerification": true
+}
+
 
 6. For credit card payments, apply a 2% fee for transactions below 10,000 NOK (Norwegian Krone).
 {
@@ -35,4 +61,7 @@ Case study basic rule questions:
     "TransactionAmount": 9999.0,
     "Currency": "NOK"
 }
-
+Response:
+{
+    "Fee": 199.98
+}

@@ -9,13 +9,18 @@ Inorder to test and work easily, the project is designed in two modules.
 1. A simple spring boot application to test the Lambda handler function locally.
 2. The actual Lambda handler to be deployed in AWS
 
+## API Specification
+The API specification for the application can be found under 
+```
+data/api_spec.yml
+```
 ## Build and Running (Locally)
 
 ### Prerequisites
 
 - Java 17
 - Maven
-- Docker, Docker-compose
+- Docker, docker-compose
 - Make
 
 ### Build
@@ -39,6 +44,12 @@ If **make** is not available, run the following command from root directory.
 ```sh
 docker-compose up -d
 ```
+### Test
+To test the functionalities, once the application is started locally, sample request response can be found under
+```sh
+data/sample_requests.txt
+```
+Make use of Postman or curl command to test the application.
 ### Stop
 To stop the application and kill the created docker containers, run the following command.
 ```sh
