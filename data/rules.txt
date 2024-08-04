@@ -1,0 +1,282 @@
+{
+  "RuleID": 1,
+  "Description": "Select Payment methods based on the country",
+  "Criteria": {
+    "Country": "Norway"
+  },
+  "Action": {
+    "PaymentMethod": "Vipps"
+  }
+}
+
+{
+  "RuleID": {
+    "N": "1"
+  },
+  "Description": {
+    "S": "Select Payment methods based on the country"
+  },
+  "Criteria": {
+    "M": {
+      "Country": {
+        "S": "Norway"
+      }
+    }
+  },
+  "Action": {
+    "M": {
+      "PaymentMethod": {
+        "S": "Vipps"
+      }
+    }
+  }
+}
+
+
+{
+  "RuleID": 2,
+  "Description": "Waive 3DS for existing customers with a previous successful 3DS transaction in the last year",
+  "Criteria": {
+    "Previous3DS": true,
+    "Last3DSTransactionWithinDays": 365
+  },
+  "Action": {
+    "Waive3DS": true
+  }
+}
+
+{
+  "RuleID": {
+    "N": "2"
+  },
+  "Description": {
+    "S": "Waive 3DS for existing customers with a previous successful 3DS transaction in the last year"
+  },
+  "Criteria": {
+    "M": {
+      "Previous3DS": {
+        "BOOL": true
+      },
+      "Last3DSTransactionWithinDays": {
+        "N": "365"
+      }
+    }
+  },
+  "Action": {
+    "M": {
+      "Waive3DS": {
+        "BOOL": true
+      }
+    }
+  }
+}
+
+
+{
+  "RuleID": 3,
+  "Description": "Route Mastercard transactions in SEK to different acquirers",
+  "Criteria": {
+    "PaymentMethod": "MasterCard",
+    "Currency": "SEK"
+  },
+  "Action": {
+    "Routing": {
+      "AcquirerA": 20,
+      "AcquirerB": 50,
+      "AcquirerC": 30
+    }
+  }
+}
+
+{
+  "RuleID": {
+    "N": "3"
+  },
+  "Action": {
+    "M": {
+      "Routing": {
+        "M": {
+          "AcquirerA": {
+            "N": "20"
+          },
+          "AcquirerB": {
+            "N": "50"
+          },
+          "AcquirerC": {
+            "N": "30"
+          }
+        }
+      }
+    }
+  },
+  "Criteria": {
+    "M": {
+      "Currency": {
+        "S": "SEK"
+      },
+      "PaymentMethod": {
+        "S": "MasterCard"
+      }
+    }
+  },
+  "Description": {
+    "S": "Route Mastercard transactions in SEK to different acquirers"
+  }
+}
+
+{
+  "RuleID": 4,
+  "Description": "Enable a new feature only for employees in Norway",
+  "Criteria": {
+    "CustomerType": "Employee",
+    "Country": "Norway"
+  },
+  "Action": {
+    "EnableFeature": true
+  }
+}
+
+{
+  "RuleID": {
+    "N": "4"
+  },
+  "Action": {
+    "M": {
+      "EnableFeature": {
+        "BOOL": true
+      }
+    }
+  },
+  "Criteria": {
+    "M": {
+      "Country": {
+        "S": "Norway"
+      },
+      "CustomerType": {
+        "S": "Employee"
+      }
+    }
+  },
+  "Description": {
+    "S": "Enable a new feature only for employees in Norway"
+  }
+}
+
+{
+  "RuleID": 5,
+  "Description": "For high-risk countries, transactions exceeding $10,000 require additional verification",
+  "Criteria": {
+    "Country": "Belgium",
+    "TransactionAmountGreaterThan": 10000
+  },
+  "Action": {
+    "RequireAdditionalVerification": true
+  }
+}
+
+{
+  "RuleID": {
+    "N": "5"
+  },
+  "Action": {
+    "M": {
+      "RequireAdditionalVerification": {
+        "BOOL": true
+      }
+    }
+  },
+  "Criteria": {
+    "M": {
+      "Country": {
+        "S": "Belgium"
+      },
+      "TransactionAmountGreaterThan": {
+        "N": "10000"
+      }
+    }
+  },
+  "Description": {
+    "S": "For high-risk countries, transactions exceeding $10,000 require additional verification"
+  }
+}
+
+{
+  "RuleID": 6,
+  "Description": "For high-risk countries, transactions exceeding $10,000 require additional verification",
+  "Criteria": {
+    "Country": "China",
+    "TransactionAmountGreaterThan": 10000
+  },
+  "Action": {
+    "RequireAdditionalVerification": true
+  }
+}
+
+{
+  "RuleID": {
+    "N": "6"
+  },
+  "Action": {
+    "M": {
+      "RequireAdditionalVerification": {
+        "BOOL": true
+      }
+    }
+  },
+  "Criteria": {
+    "M": {
+      "Country": {
+        "S": "China"
+      },
+      "TransactionAmountGreaterThan": {
+        "N": "10000"
+      }
+    }
+  },
+  "Description": {
+    "S": "For high-risk countries, transactions exceeding $10,000 require additional verification"
+  }
+}
+
+{
+  "RuleID": 7,
+  "Description": "Apply a 2% fee for credit card transactions below 10,000 NOK",
+  "Criteria": {
+    "PaymentMethod": "CreditCard",
+    "TransactionAmountLessThan": 10000,
+    "Currency": "NOK"
+  },
+  "Action": {
+    "ApplyFee": 2
+  }
+}
+
+{
+  "RuleID": {
+    "N": "7"
+  },
+  "Action": {
+    "M": {
+      "ApplyFee": {
+        "N": "2"
+      }
+    }
+  },
+  "Criteria": {
+    "M": {
+      "Currency": {
+        "S": "NOK"
+      },
+      "PaymentMethod": {
+        "S": "CreditCard"
+      },
+      "TransactionAmountLessThan": {
+        "N": "10000"
+      }
+    }
+  },
+  "Description": {
+    "S": "Apply a 2% fee for credit card transactions below 10,000 NOK"
+  }
+}
+

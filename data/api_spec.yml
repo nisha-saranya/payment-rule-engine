@@ -1,0 +1,70 @@
+openapi: 3.0.1
+info:
+  title: Payment Rule Engine API
+  description: API for evaluating payment scenarios based on various criteria and rules.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local server
+
+paths:
+  /evaluate:
+    post:
+      operationId: evaluateApi
+      summary: Evaluate payment scenarios based on provided input
+      description: Evaluate payment scenarios based on criteria such as customer type, transaction amount, payment method, and geographical location.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: object
+              example:
+                Country: Norway
+                PaymentMethod: Mastercard
+                CustomerType: existing
+                Previous3DSTransaction: true
+                Last3DSTransactionDate: "2023-07-01"
+                GeographicalLocation: "Country-X"
+                TransactionAmount: 15000
+                Currency: NOK
+                UserType: employee
+      responses:
+        '200':
+          description: Successful evaluation of payment rules
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+              example:
+                PaymentMethod: Vipps
+                Acquirer: Acquirer B
+                Waive3DS: true
+                EnableFeature: true
+                RequireVerification: true
+                Fee: 180.0
+                result: "No applicable rule found"
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid input data
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: An error occurred while processing the request

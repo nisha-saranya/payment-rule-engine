@@ -71,6 +71,7 @@ public class RequestValidator {
                     break;
             }
         }
+        stringBuilder.append("]");
         return requestValid;
     }
 
