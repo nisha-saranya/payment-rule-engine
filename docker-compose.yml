@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  dynamodb-local:
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+    restart: always
+    volumes:
+      - "./data:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+
+  dynamodb:
+    image: "aaronshaf/dynamodb-admin"
+    container_name: dynamodb-admin
+    depends_on:
+      - dynamodb-local
+    restart: always
+    ports:
+      - "8001:8001"
+    environment:
+      - DYNAMO_ENDPOINT=http://dynamodb-local:8000
+      - AWS_REGION=ap-southeast-1
+
+  payment-rule-engine-app:
+    build:
+      context: .
+    image: arjunr1432/payment-rule-engine-app
+    ports:
+      - "8080:8080"
+    environment:
+      AWS_DYNAMODB_ENDPOINT: http://dynamodb-local:8000
+    depends_on:
+      - dynamodb-local
