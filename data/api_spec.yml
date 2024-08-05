@@ -12,7 +12,15 @@ paths:
     post:
       operationId: evaluateApi
       summary: Evaluate payment scenarios based on provided input
-      description: Evaluate payment scenarios based on criteria such as customer type, transaction amount, payment method, and geographical location.
+      description: Evaluate payment scenarios based on criteria such as customer type, transaction amount, payment method, country etc.
+      parameters:
+        - name: jwt_token
+          in: header
+          required: true
+          schema:
+            type: string
+            example: allow
+          description: The JWT token used for authentication and authorization.
       requestBody:
         required: true
         content:
@@ -24,13 +32,11 @@ paths:
               example:
                 Country: Norway
                 PaymentMethod: Mastercard
-                CustomerType: existing
-                Previous3DSTransaction: true
-                Last3DSTransactionDate: "2023-07-01"
-                GeographicalLocation: "Country-X"
+                CustomerType: Employee
+                Previous3DS: true
+                DaysSinceLast3DS: 123
                 TransactionAmount: 15000
                 Currency: NOK
-                UserType: employee
       responses:
         '200':
           description: Successful evaluation of payment rules
@@ -42,12 +48,11 @@ paths:
                   type: object
               example:
                 PaymentMethod: Vipps
-                Acquirer: Acquirer B
+                Route: Acquirer B
                 Waive3DS: true
                 EnableFeature: true
-                RequireVerification: true
+                RequireAdditionalVerification: true
                 Fee: 180.0
-                result: "No applicable rule found"
         '400':
           description: Invalid input
           content:
@@ -55,9 +60,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  error:
+                  Error:
                     type: string
-                    example: Invalid input data
+                    example: "[Validation Errors: 1:- Invalid country name.]"
         '500':
           description: Internal server error
           content:
@@ -65,6 +70,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  error:
+                  Error:
                     type: string
-                    example: An error occurred while processing the request
+                    example: Exception in the application.
