@@ -1,8 +1,5 @@
 package com.example.handlers;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
@@ -35,18 +32,8 @@ public class PaymentRuleEngineHandler implements RequestHandler<Map<String, Obje
         this.requestValidator = new RequestValidator();
     }
 
-    public PaymentRuleEngineHandler(Boolean isLocal) {
-        AmazonDynamoDB client;
-        if (isLocal) {
-            client = AmazonDynamoDBClientBuilder.standard()
-                    .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://dynamodb-local:8000", "us-west-2"))
-                    .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials("dummyAccessKey", "dummySecretKey")))
-                    .build();
-        } else {
-            client = AmazonDynamoDBClientBuilder.defaultClient();
-        }
-
-        this.dynamoDB = new DynamoDB(client);
+    public PaymentRuleEngineHandler(DynamoDB dynamoDB) {
+        this.dynamoDB = dynamoDB;
         this.table = dynamoDB.getTable("PaymentRules");
         this.requestValidator = new RequestValidator();
     }
@@ -61,7 +48,9 @@ public class PaymentRuleEngineHandler implements RequestHandler<Map<String, Obje
                 LOGGER.warning("Request contains validation errors: " + errorBuilder);
                 return Map.of("Error", errorBuilder.toString());
             }
-            table.scan(new ScanSpec()).forEach(item -> {
+            var ruleIterator = table.scan(new ScanSpec()).iterator();
+            while (ruleIterator.hasNext()) {
+                var item = ruleIterator.next();
                 Map<String, Object> criteria = item.getMap("Criteria");
                 Map<String, Object> action = item.getMap("Action");
 
@@ -69,7 +58,7 @@ public class PaymentRuleEngineHandler implements RequestHandler<Map<String, Obje
                     applyAction(input, action, result);
                     LOGGER.info("Rule matched: " + item.get("RuleID"));
                 }
-            });
+            }
         } catch (Exception ignored) {
             LOGGER.warning("Exception in the function: " + ignored.getMessage());
             return Map.of("Error", "Exception in the application.");
